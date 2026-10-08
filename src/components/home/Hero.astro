@@ -1,0 +1,354 @@
+---
+import Icon from '../Icon.astro';
+import CopyEmail from '../CopyEmail.astro';
+import ServerIllustration from './ServerIllustration.astro';
+import { site, withBase } from '../../data/site';
+
+// Cada libro del estante lleva a una sección. Alto/ancho en px, color de tela del lomo.
+const books = [
+  { label: 'Sobre mí', href: '#sobre-mi', color: '#7a2e2e', h: 206, w: 50 },
+  { label: 'Qué hago hoy', href: '#hoy', color: '#2f4f6b', h: 232, w: 58 },
+  { label: 'Proyectos', href: '#proyectos', color: '#3e5f3a', h: 198, w: 48 },
+  { label: 'Caso LMS', href: withBase('/proyectos/lms'), color: '#1f3b2a', h: 250, w: 80, featured: true },
+  { label: 'Enseño', href: '#enseno', color: '#7a5b14', h: 214, w: 50 },
+  { label: 'Fuera del código', href: '#fuera', color: '#5a3a5e', h: 226, w: 56 },
+  { label: 'Contacto', href: '#contacto', color: '#6b3a1e', h: 196, w: 48, lean: true },
+];
+
+// Los talleres, apilados en horizontal.
+const stack = [
+  { label: 'NestJS · Angular', color: '#2f4f6b', w: 176 },
+  { label: 'SQL Server', color: '#7a2e2e', w: 156 },
+  { label: 'Java', color: '#3e5f3a', w: 190 },
+  { label: 'Git y GitFlow', color: '#5a3a5e', w: 168 },
+];
+---
+
+<section class="container hero">
+  <div class="intro">
+    <div class="kicker">{site.role} · {site.location}</div>
+    <!-- TODO: revisar el texto final del hero -->
+    <h1>Hola, soy Javier.</h1>
+    <p class="tagline">Construyo software como en una empresa — y enseño a hacerlo.</p>
+    <p class="lead">
+      Analista de Soporte TI y Software en Intermex. Fuera del trabajo monto mi propia infraestructura: un homelab con
+      CI/CD y un LMS hecho desde cero con prácticas de equipo profesional. Saca un libro del estante.
+    </p>
+    <div class="actions">
+      <a class="btn btn-primary" href={withBase('/proyectos/lms')}>
+        Abrir el caso LMS <Icon name="arrow" size={18} />
+      </a>
+      {
+        site.cvPdf && (
+          <a class="btn" href={withBase(site.cvPdf)} download>
+            Descargar CV <Icon name="download" size={18} />
+          </a>
+        )
+      }
+      <div class="socials">
+        <a href={site.github} aria-label="GitHub" rel="me"><Icon name="github" /></a>
+        {site.linkedin && <a href={site.linkedin} aria-label="LinkedIn" rel="me"><Icon name="linkedin" /></a>}
+        <CopyEmail variant="icon" />
+      </div>
+    </div>
+  </div>
+
+  <div class="bookcase wood">
+    <div class="back">
+      <!-- repisa 1: libros = secciones -->
+      <nav class="shelf books" aria-label="Secciones del sitio">
+        {
+          books.map((b) => (
+            <a
+              href={b.href}
+              class:list={['book', { featured: b.featured, lean: b.lean }]}
+              style={`--spine: ${b.color}; height: ${b.h}px; width: ${b.w}px;`}
+            >
+              <span>{b.label}</span>
+            </a>
+          ))
+        }
+      </nav>
+      <div class="plank wood" aria-hidden="true"></div>
+
+      <!-- repisa 2: el servidor, su foto y los talleres -->
+      <div class="shelf objects">
+        <figure class="laptop">
+          <ServerIllustration />
+          <figcaption>Mi servidor: un notebook</figcaption>
+        </figure>
+        <figure class="frame">
+          <div class="frame-wood wood">
+            <img
+              src={withBase(site.homelabPhoto.src)}
+              alt={site.homelabPhoto.alt}
+              width="960"
+              height="1280"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          {site.homelabPhoto.isReference && <figcaption class="brass-label">Imagen referencial</figcaption>}
+        </figure>
+        <a class="stack" href="#enseno" aria-label="Talleres que enseño: Git y GitFlow, Java, SQL Server, NestJS y Angular">
+          {
+            stack.map((s) => (
+              <span class="hbook" style={`--spine: ${s.color}; width: ${s.w}px;`}>
+                {s.label}
+              </span>
+            ))
+          }
+        </a>
+      </div>
+      <div class="plank wood" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-top: 56px;
+    padding-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 44px;
+  }
+  .intro {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    max-width: 760px;
+  }
+  h1 {
+    font-size: clamp(40px, 6vw, 64px);
+    font-weight: 700;
+  }
+  .tagline {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(22px, 3vw, 30px);
+    line-height: 1.25;
+    color: var(--ink-2);
+  }
+  .lead {
+    font-size: 19px;
+    color: var(--ink-2);
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin-top: 6px;
+  }
+  .socials {
+    display: flex;
+    gap: 4px;
+  }
+  .socials a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    color: var(--ink);
+    border-radius: var(--radius);
+  }
+  .socials a:hover {
+    color: var(--accent);
+    background: var(--surface);
+  }
+
+  /* ---------- mueble ---------- */
+  .bookcase {
+    padding: 16px;
+    border-radius: 6px;
+    box-shadow:
+      0 24px 40px -24px rgb(40 20 5 / 0.7),
+      inset 0 0 0 1px rgb(0 0 0 / 0.25);
+  }
+  .back {
+    background-color: var(--wood-back);
+    background-image:
+      repeating-linear-gradient(90deg, rgb(0 0 0 / 0.12) 0 2px, transparent 2px 11px),
+      linear-gradient(rgb(0 0 0 / 0.35), transparent 40px);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .shelf {
+    display: flex;
+    align-items: flex-end;
+    padding: 32px 20px 0;
+    min-height: 290px;
+  }
+  .plank {
+    height: 20px;
+    box-shadow: 0 8px 12px -6px rgb(0 0 0 / 0.6);
+    position: relative;
+  }
+
+  /* libros */
+  .books {
+    gap: 4px;
+  }
+  /* en pantallas angostas los libros se recorren en horizontal */
+  @media (max-width: 640px) {
+    .books {
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding-top: 48px;
+    }
+  }
+  .book {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 34px 0;
+    text-decoration: none;
+    color: var(--spine-text);
+    background-color: var(--spine);
+    background-image:
+      linear-gradient(
+        180deg,
+        transparent 14px,
+        var(--brass) 14px 17px,
+        transparent 17px 21px,
+        var(--brass) 21px 23px,
+        transparent 23px
+      ),
+      linear-gradient(
+        0deg,
+        transparent 14px,
+        var(--brass) 14px 17px,
+        transparent 17px 21px,
+        var(--brass) 21px 23px,
+        transparent 23px
+      ),
+      linear-gradient(90deg, rgb(0 0 0 / 0.28), rgb(255 255 255 / 0.08) 35%, rgb(0 0 0 / 0.18));
+    border-radius: 3px 3px 1px 1px;
+    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.25);
+    transition: transform 0.18s ease;
+  }
+  .book span {
+    writing-mode: vertical-rl;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+  .book:hover,
+  .book:focus-visible {
+    transform: translateY(-12px);
+    color: #ffffff;
+  }
+  .book.featured span {
+    font-size: 18px;
+    color: #f0d68a;
+  }
+  .book.lean {
+    margin-left: 10px;
+    transform: rotate(7deg);
+    transform-origin: bottom left;
+  }
+  .book.lean:hover,
+  .book.lean:focus-visible {
+    transform: rotate(7deg) translateY(-12px);
+  }
+
+  /* repisa con objetos */
+  .objects {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 24px 28px;
+  }
+  figure {
+    margin: 0;
+  }
+  .laptop {
+    flex: 1 1 340px;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .laptop figcaption {
+    align-self: center;
+    font-size: 14px;
+    font-style: italic;
+    color: #e9dcc3;
+    margin-bottom: 6px;
+  }
+  .frame {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .frame-wood {
+    padding: 10px;
+    border-radius: 2px;
+    box-shadow:
+      inset 0 0 0 2px var(--brass),
+      0 10px 14px -8px rgb(0 0 0 / 0.7);
+  }
+  .frame img {
+    display: block;
+    width: 132px;
+    height: 176px;
+    object-fit: cover;
+    border: 2px solid #1c120a;
+  }
+  .brass-label {
+    font-size: 12px;
+    font-variant: small-caps;
+    letter-spacing: 0.06em;
+    padding: 1px 10px;
+    color: #2b1d12;
+    background: linear-gradient(180deg, #e2c46f, var(--brass) 55%, var(--brass-dark));
+    border-radius: 2px;
+  }
+  .stack {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+  }
+  .hbook {
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--spine-text);
+    background-color: var(--spine);
+    background-image: linear-gradient(
+        90deg,
+        transparent 10px,
+        var(--brass) 10px 12px,
+        transparent 12px calc(100% - 12px),
+        var(--brass) calc(100% - 12px) calc(100% - 10px),
+        transparent calc(100% - 10px)
+      ),
+      linear-gradient(180deg, rgb(255 255 255 / 0.1), rgb(0 0 0 / 0.25));
+    border-radius: 2px;
+    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.25);
+    transition: transform 0.18s ease;
+  }
+  .hbook:nth-child(2) {
+    transform: translateX(8px);
+  }
+  .hbook:nth-child(3) {
+    transform: translateX(-6px);
+  }
+  .stack:hover .hbook:first-child,
+  .stack:focus-visible .hbook:first-child {
+    transform: translateX(14px) rotate(-3deg);
+  }
+</style>

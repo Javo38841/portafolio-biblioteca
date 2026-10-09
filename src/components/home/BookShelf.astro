@@ -1,0 +1,312 @@
+---
+// Estante de libros. Modos:
+//  - static: solo lomos.
+//  - card:   cada lomo es un botón que muestra su ficha de lectura al lado del estante
+//            (y su portada en la repisa, si el libro tiene `cover`).
+//  - cover:  cada lomo es un botón que pone la portada del libro de pie en la misma repisa.
+import { withBase } from '../../data/site';
+
+interface Book {
+  title: string;
+  author: string;
+  color: string;
+  applied?: string;
+  cover?: string;
+  dark?: boolean;
+}
+
+interface Props {
+  books: Book[];
+  label: string;
+  mode?: 'static' | 'card' | 'cover';
+}
+
+const { books, label, mode = 'static' } = Astro.props;
+const interactive = mode !== 'static';
+const showStand = mode === 'cover' || (mode === 'card' && books.some((b) => b.cover));
+const heights = [282, 300, 268, 294, 276, 300, 286, 272];
+const data = books.map((b) => ({ ...b, cover: b.cover ? withBase(b.cover) : undefined }));
+---
+
+<div class:list={['shelf-wrap', `mode-${mode}`]} data-shelf={interactive ? JSON.stringify(data) : undefined} data-mode={mode}>
+  <div class="case wood">
+    <div class="back">
+      <div class="row" role={interactive ? 'group' : 'list'} aria-label={label}>
+        {
+          books.map((b, i) =>
+            interactive ? (
+              <button
+                type="button"
+                class:list={['spine', { dark: b.dark }]}
+                data-i={i}
+                aria-pressed="false"
+                style={`--spine: ${b.color}; height: ${heights[i % heights.length]}px;`}
+              >
+                <span class="title">{b.title}</span>
+                {b.author && <span class="author">{b.author}</span>}
+              </button>
+            ) : (
+              <div
+                role="listitem"
+                class:list={['spine', { dark: b.dark }]}
+                style={`--spine: ${b.color}; height: ${heights[i % heights.length]}px;`}
+              >
+                <span class="title">{b.title}</span>
+                {b.author && <span class="author">{b.author}</span>}
+              </div>
+            ),
+          )
+        }
+        {
+          showStand && (
+            <div class="stand" aria-live="polite">
+              <img data-cover alt="" hidden />
+              <p class="stand-empty" data-empty>
+                Saca un libro para ver su portada
+              </p>
+            </div>
+          )
+        }
+      </div>
+    </div>
+    <div class="plank wood" aria-hidden="true"></div>
+  </div>
+
+  {
+    mode === 'card' && (
+      <article class="ficha" aria-live="polite">
+        <header class="ficha-head">Ficha de lectura</header>
+        <p class="empty" data-empty>
+          Saca un libro del estante para ver su ficha.
+        </p>
+        <dl data-fields hidden>
+          <dt>Título</dt>
+          <dd data-field="title" />
+          <dt>Autor</dt>
+          <dd data-field="author" />
+          <dt>Dónde lo aplico</dt>
+          <dd data-field="applied" />
+        </dl>
+      </article>
+    )
+  }
+</div>
+
+<script>
+  type Book = { title: string; author: string; applied?: string; cover?: string };
+
+  document.querySelectorAll<HTMLElement>('[data-shelf]').forEach((root) => {
+    const books: Book[] = JSON.parse(root.dataset.shelf ?? '[]');
+    const mode = root.dataset.mode;
+    const spines = [...root.querySelectorAll<HTMLButtonElement>('button.spine')];
+    const empties = root.querySelectorAll<HTMLElement>('[data-empty]');
+    const field = (name: string) => root.querySelector<HTMLElement>(`[data-field="${name}"]`)!;
+    const fields = root.querySelector<HTMLElement>('[data-fields]');
+    const cover = root.querySelector<HTMLImageElement>('[data-cover]');
+
+    spines.forEach((spine) =>
+      spine.addEventListener('click', () => {
+        const book = books[Number(spine.dataset.i)];
+        spines.forEach((s) => s.setAttribute('aria-pressed', String(s === spine)));
+        empties.forEach((e) => (e.hidden = true));
+
+        if (mode === 'card' && fields) {
+          field('title').textContent = book.title;
+          field('author').textContent = book.author;
+          field('applied').textContent = book.applied ?? '';
+          fields.hidden = false;
+        }
+
+        if (cover && book.cover) {
+          cover.hidden = false;
+          cover.classList.remove('show');
+          cover.src = book.cover;
+          cover.alt = `Portada de ${book.title}${book.author ? `, de ${book.author}` : ''}`;
+          // reinicia la animación de "sacar el libro"
+          void cover.offsetWidth;
+          cover.classList.add('show');
+        }
+      }),
+    );
+  });
+</script>
+
+<style>
+  .shelf-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px;
+    align-items: center;
+  }
+  .case {
+    flex: 2 1 520px;
+    min-width: 0;
+    padding: 14px 14px 0;
+    border-radius: 6px;
+    box-shadow: 0 20px 34px -22px rgb(40 20 5 / 0.7);
+  }
+  .back {
+    background-color: var(--wood-back);
+    background-image:
+      repeating-linear-gradient(90deg, rgb(0 0 0 / 0.12) 0 2px, transparent 2px 11px),
+      linear-gradient(rgb(0 0 0 / 0.35), transparent 40px);
+    padding: 36px 16px 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  .row {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    min-width: max-content;
+  }
+  .plank {
+    height: 18px;
+    margin: 0 -14px;
+    box-shadow: 0 8px 12px -6px rgb(0 0 0 / 0.6);
+  }
+
+  .spine {
+    flex: 0 0 auto;
+    min-width: 58px;
+    padding: 30px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    writing-mode: vertical-rl;
+    border: none;
+    border-radius: 3px 3px 1px 1px;
+    color: var(--spine-text);
+    background-color: var(--spine);
+    background-image:
+      linear-gradient(180deg, transparent 12px, var(--brass) 12px 15px, transparent 15px),
+      linear-gradient(0deg, transparent 12px, var(--brass) 12px 15px, transparent 15px),
+      linear-gradient(90deg, rgb(0 0 0 / 0.28), rgb(255 255 255 / 0.08) 35%, rgb(0 0 0 / 0.18));
+    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.25);
+    font-family: var(--font-display);
+    text-align: center;
+    transition: transform 0.18s ease;
+  }
+  .spine.dark {
+    color: #2b1d12;
+  }
+  .title {
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 1.2;
+  }
+  .author {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-style: italic;
+    opacity: 0.9;
+  }
+  button.spine {
+    cursor: pointer;
+  }
+  button.spine:hover,
+  button.spine:focus-visible {
+    transform: translateY(-10px);
+  }
+  button.spine[aria-pressed='true'] {
+    transform: translateY(-22px);
+  }
+
+  /* portada de pie en la repisa */
+  .stand {
+    flex: 0 0 auto;
+    width: 220px;
+    height: 300px;
+    margin-left: 28px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .stand img {
+    max-width: 200px;
+    max-height: 290px;
+    width: auto;
+    height: auto;
+    border-radius: 2px 4px 4px 2px;
+    box-shadow:
+      inset 4px 0 0 rgb(0 0 0 / 0.2),
+      -8px 10px 16px -6px rgb(0 0 0 / 0.65);
+    transform: rotate(-3deg);
+    transform-origin: bottom center;
+  }
+  .stand img.show {
+    animation: pull-out 0.35s ease-out;
+  }
+  @keyframes pull-out {
+    from {
+      opacity: 0;
+      transform: translateX(-40px) rotate(-8deg);
+    }
+    to {
+      opacity: 1;
+      transform: rotate(-3deg);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .stand img.show {
+      animation: none;
+    }
+  }
+  .stand-empty {
+    align-self: center;
+    text-align: center;
+    font-style: italic;
+    font-size: 15px;
+    color: #c9b89c;
+    padding: 0 12px;
+  }
+
+  /* ficha de biblioteca: siempre papel claro, también en modo oscuro */
+  .ficha {
+    flex: 1 1 300px;
+    min-width: 0;
+    min-height: 260px;
+    padding: 18px 22px 22px;
+    color: #2b1d12;
+    background-color: #fdf8ec;
+    background-image: repeating-linear-gradient(transparent 0 31px, rgb(47 79 107 / 0.22) 31px 32px);
+    background-position: 0 52px;
+    border-top: 4px solid #b23a3a;
+    border-radius: 3px;
+    box-shadow: 0 14px 24px -16px rgb(40 20 5 / 0.6);
+    transform: rotate(-1deg);
+  }
+  .ficha-head {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 18px;
+    margin-bottom: 14px;
+  }
+  .empty {
+    font-style: italic;
+    color: #6b5440;
+  }
+  dl {
+    margin: 0;
+    display: grid;
+    gap: 2px;
+  }
+  dl[hidden] {
+    display: none;
+  }
+  dt {
+    font-size: 13px;
+    font-variant: small-caps;
+    letter-spacing: 0.06em;
+    color: #6b5440;
+    margin-top: 8px;
+  }
+  dd {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+</style>

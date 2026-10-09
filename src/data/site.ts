@@ -8,9 +8,8 @@ export const site = {
   github: 'https://github.com/Javo38841',
   linkedin: '', // TODO: URL de tu perfil de LinkedIn
   cvPdf: '', // TODO: p. ej. '/cv-javier-choque.pdf' (copiarlo a public/, sin teléfono)
-  // Foto del homelab en "Sobre mí". Hoy es una imagen referencial CC0 de Wikimedia Commons
-  // ("Legrand S.A. server rack"); TODO: reemplazar por la foto de tu servidor y poner `isReference: false`.
-  homelabPhoto: { src: '/img/servidor-referencial.jpg', alt: 'Rack de servidores', isReference: true },
+  // Foto real del homelab: el notebook que hace de servidor.
+  homelabPhoto: { src: '/img/servidor.jpg', alt: 'Mi servidor: un notebook con Ubuntu Server y la terminal abierta', isReference: false },
 };
 
 // Antepone el `base` de Astro (necesario si se despliega bajo un subpath en GitHub Pages).

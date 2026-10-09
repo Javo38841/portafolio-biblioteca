@@ -4,6 +4,10 @@ import Hero from '../components/home/Hero.astro';
 import SectionHeader from '../components/SectionHeader.astro';
 import Icon from '../components/Icon.astro';
 import CopyEmail from '../components/CopyEmail.astro';
+import BookShelf from '../components/home/BookShelf.astro';
+import books from '../data/books.json';
+import RecordCrate from '../components/home/RecordCrate.astro';
+import music from '../data/music.json';
 import { site, withBase } from '../data/site';
 
 // TODO: todos los textos de esta página son un borrador a partir de tus CVs; reescríbelos con tu voz.
@@ -205,18 +209,37 @@ const university = [
     </div>
   </section>
 
+  <section id="libros" class="section container">
+    <SectionHeader
+      number="06"
+      kicker="Libros que me formaron"
+      title="Lo que leo para trabajar mejor"
+      lead="Libros que cambiaron cómo trabajo. Saca uno del estante para ver dónde lo aplico."
+    />
+    <BookShelf books={books.formation} label="Libros que me formaron" mode="card" />
+  </section>
+
   <section id="fuera" class="section container">
-    <SectionHeader number="06" kicker="Fuera del código" title="Música, cine y cultura" />
+    <SectionHeader number="07" kicker="Fuera del código" title="Música, cine, cultura y libros" />
     <div class="prose">
       <p>
         Me gustan los centros culturales, el cine y las tocatas de música independiente. No es casualidad que mi proyecto
         de título, BeatMap, fuera un mapa para conectar artistas, espacios y público.
       </p>
     </div>
+    <h3 class="subhead">Lo que suena en mis audífonos</h3>
+    <RecordCrate artists={music.artists} label="Mis artistas favoritos" />
+    <h3 class="subhead">En la mesa de noche</h3>
+    <div class="prose">
+      <p>Algunos de mis libros favoritos. Saca uno del estante para ver su portada:</p>
+    </div>
+    <div class="favorites">
+      <BookShelf books={books.favorites} label="Mis libros favoritos" mode="cover" />
+    </div>
   </section>
 
   <section id="contacto" class="section container">
-    <SectionHeader number="07" kicker="Contacto" title="Conversemos" />
+    <SectionHeader number="08" kicker="Contacto" title="Conversemos" />
     <div class="contact">
       <CopyEmail variant="button" />
       <a class="btn" href={site.github}><Icon name="github" size={18} /> GitHub</a>
@@ -365,6 +388,10 @@ const university = [
     display: flex;
     flex-direction: column;
     gap: 32px;
+  }
+  .favorites {
+    margin-top: 20px;
+    max-width: 900px;
   }
   .contact {
     display: flex;

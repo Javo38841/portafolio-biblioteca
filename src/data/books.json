@@ -1,0 +1,98 @@
+{
+  "_comment": "Libros del sitio. `applied` es dónde aplico cada libro de trabajo (borrador a partir del CV: reescríbelo con tu voz). `color` es la tela del lomo. `cover` es la portada que se muestra en la repisa al sacar un libro del estante.",
+  "formation": [
+    {
+      "title": "The Mom Test",
+      "author": "Rob Fitzpatrick",
+      "applied": "Para levantar requerimientos con usuarios finales: la API que integra el ERP con un CRM y el MVP de logística de vehículos.",
+      "color": "#7a2e2e",
+      "cover": "/img/books/the-mom-test.jpg"
+    },
+    {
+      "title": "The Lean Startup",
+      "author": "Eric Ries",
+      "applied": "En BeatMap, mi proyecto de título: apliqué sus principios durante el desarrollo.",
+      "color": "#2f4f6b",
+      "cover": "/img/books/the-lean-startup.jpg"
+    },
+    {
+      "title": "Design Patterns",
+      "author": "Gamma, Helm, Johnson y Vlissides",
+      "applied": "En mis ayudantías (MVC y programación orientada a objetos) y en la arquitectura de mis proyectos.",
+      "color": "#3e5f3a",
+      "cover": "/img/books/design-patterns.jpg"
+    },
+    {
+      "title": "The Toyota Way",
+      "author": "Jeffrey K. Liker",
+      "applied": "En la gestión de incidencias con Kanban y principios TPS/Lean en mi trabajo.",
+      "color": "#8c2f2f",
+      "cover": "/img/books/the-toyota-way.jpg"
+    },
+    {
+      "title": "Toyota Talent",
+      "author": "Jeffrey K. Liker y David P. Meier",
+      "applied": "En cómo diseño mis talleres y capacito a otras personas.",
+      "color": "#7a5b14",
+      "cover": "/img/books/toyota-talent.jpg"
+    },
+    {
+      "title": "Las 5 disfunciones de un equipo",
+      "author": "Patrick Lencioni",
+      "applied": "Al coordinar equipos de desarrollo, desde mi práctica profesional hasta el LMS.",
+      "color": "#5a3a5e",
+      "cover": "/img/books/las-5-disfunciones-de-un-equipo.jpg"
+    }
+  ],
+  "favorites": [
+    {
+      "title": "Los Gatos Guerreros",
+      "author": "Erin Hunter",
+      "color": "#3e5f3a",
+      "cover": "/img/books/los-gatos-guerreros.jpg"
+    },
+    {
+      "title": "Rebeldes",
+      "author": "S. E. Hinton",
+      "color": "#2f4f6b",
+      "cover": "/img/books/rebeldes.jpg"
+    },
+    {
+      "title": "Mi libro de historias bíblicas",
+      "author": "",
+      "color": "#c9a227",
+      "dark": true,
+      "cover": "/img/books/mi-libro-de-historias-biblicas.jpg"
+    },
+    {
+      "title": "It",
+      "author": "Stephen King",
+      "color": "#8c2f2f",
+      "cover": "/img/books/it.jpg"
+    },
+    {
+      "title": "Espejos",
+      "author": "Eduardo Galeano",
+      "color": "#6b3a1e",
+      "cover": "/img/books/espejos.jpg"
+    },
+    {
+      "title": "Memoria del fuego II",
+      "author": "Eduardo Galeano",
+      "color": "#5a3a5e",
+      "cover": "/img/books/memoria-del-fuego-2.jpg"
+    },
+    {
+      "title": "La última pregunta",
+      "author": "Isaac Asimov",
+      "color": "#9a4a14",
+      "cover": "/img/books/la-ultima-pregunta.jpg"
+    },
+    {
+      "title": "Altazor",
+      "author": "Vicente Huidobro",
+      "color": "#285f88",
+      "cover": "/img/books/altazor.jpg"
+    }
+  ]
+}

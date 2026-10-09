@@ -1,0 +1,205 @@
+{
+  "_comment": "Artistas favoritos en orden, con la carátula que elegí para cada uno. Cada uno enlaza a su búsqueda en Spotify.",
+  "artists": [
+    {
+      "name": "Niños Del Cerro",
+      "cover": "/img/albums/ninos-del-cerro.jpg"
+    },
+    {
+      "name": "Pánico",
+      "cover": "/img/albums/panico.jpg"
+    },
+    {
+      "name": "Black Country, New Road",
+      "cover": "/img/albums/black-country-new-road.jpg"
+    },
+    {
+      "name": "Diego Lorenzini",
+      "cover": "/img/albums/diego-lorenzini.jpg"
+    },
+    {
+      "name": "Patio Solar",
+      "cover": "/img/albums/patio-solar.jpg"
+    },
+    {
+      "name": "Triste Domingo",
+      "cover": "/img/albums/triste-domingo.jpg"
+    },
+    {
+      "name": "Candelabro",
+      "cover": "/img/albums/candelabro.jpg"
+    },
+    {
+      "name": "Mac DeMarco",
+      "cover": "/img/albums/mac-demarco.jpg"
+    },
+    {
+      "name": "Milton Nascimento",
+      "cover": "/img/albums/milton-nascimento.jpg"
+    },
+    {
+      "name": "donato soto",
+      "cover": "/img/albums/donato-soto.jpg"
+    },
+    {
+      "name": "Kero Kero Bonito",
+      "cover": "/img/albums/kero-kero-bonito.jpg"
+    },
+    {
+      "name": "San Pedro Bonfim",
+      "cover": "/img/albums/san-pedro-bonfim.jpg"
+    },
+    {
+      "name": "Chico Trujillo",
+      "cover": "/img/albums/chico-trujillo.jpg"
+    },
+    {
+      "name": "Silabario",
+      "cover": "/img/albums/silabario.jpg"
+    },
+    {
+      "name": "Gorillaz",
+      "cover": "/img/albums/gorillaz.jpg"
+    },
+    {
+      "name": "pablorico",
+      "cover": "/img/albums/pablorico.jpg"
+    },
+    {
+      "name": "TEMPOREX",
+      "cover": "/img/albums/temporex.jpg"
+    },
+    {
+      "name": "Neutral Milk Hotel",
+      "cover": "/img/albums/neutral-milk-hotel.jpg"
+    },
+    {
+      "name": "mil ataris por segundo",
+      "cover": "/img/albums/mil-ataris-por-segundo.jpg"
+    },
+    {
+      "name": "incluso si nunca despiertas",
+      "cover": "/img/albums/incluso-si-nunca-despiertas.jpg"
+    },
+    {
+      "name": "Las Olas (Noispop)",
+      "cover": "/img/albums/las-olas-noispop.jpg"
+    },
+    {
+      "name": "Mild High Club",
+      "cover": "/img/albums/mild-high-club.jpg"
+    },
+    {
+      "name": "Cuando el problema no existe",
+      "cover": "/img/albums/cuando-el-problema-no-existe.jpg"
+    },
+    {
+      "name": "La Chica de las Camelias",
+      "cover": "/img/albums/la-chica-de-las-camelias.jpg"
+    },
+    {
+      "name": "Ainda",
+      "cover": "/img/albums/ainda.jpg"
+    },
+    {
+      "name": "necesito el valor tanto como necesito el miedo",
+      "cover": "/img/albums/necesito-el-valor-tanto-como-necesito-el-miedo.jpg"
+    },
+    {
+      "name": "Chico Buarque",
+      "cover": "/img/albums/chico-buarque.jpg"
+    },
+    {
+      "name": "Mayumi Kojima",
+      "cover": "/img/albums/mayumi-kojima.jpg"
+    },
+    {
+      "name": "Los Bunkers",
+      "cover": "/img/albums/los-bunkers.jpg"
+    },
+    {
+      "name": "veasetambien",
+      "cover": "/img/albums/veasetambien.jpg"
+    },
+    {
+      "name": "El Mató a un Policía Motorizado",
+      "cover": "/img/albums/el-mato-a-un-policia-motorizado.jpg"
+    },
+    {
+      "name": "Los Retros",
+      "cover": "/img/albums/los-retros.jpg"
+    },
+    {
+      "name": "asia menor",
+      "cover": "/img/albums/asia-menor.jpg"
+    },
+    {
+      "name": "Cartola",
+      "cover": "/img/albums/cartola.jpg"
+    },
+    {
+      "name": "Martina Montaldo",
+      "cover": "/img/albums/martina-montaldo.jpg"
+    },
+    {
+      "name": "Adoniran Barbosa",
+      "cover": "/img/albums/adoniran-barbosa.jpg"
+    },
+    {
+      "name": "João Gilberto",
+      "cover": "/img/albums/joao-gilberto.jpg"
+    },
+    {
+      "name": "Panchiko",
+      "cover": "/img/albums/panchiko.jpg"
+    },
+    {
+      "name": "SHIGEO SEKITO",
+      "cover": "/img/albums/shigeo-sekito.jpg"
+    },
+    {
+      "name": "AJJ",
+      "cover": "/img/albums/ajj.jpg"
+    },
+    {
+      "name": "Masayoshi Takanaka",
+      "cover": "/img/albums/masayoshi-takanaka.jpg"
+    },
+    {
+      "name": "The Taxpayers",
+      "cover": "/img/albums/the-taxpayers.jpg"
+    },
+    {
+      "name": "Chet Baker",
+      "cover": "/img/albums/chet-baker.jpg"
+    },
+    {
+      "name": "buenosdías viejosol",
+      "cover": "/img/albums/buenosdias-viejosol.jpg"
+    },
+    {
+      "name": "Ninajirachi",
+      "cover": "/img/albums/ninajirachi.jpg"
+    },
+    {
+      "name": "Tyler, The Creator",
+      "cover": "/img/albums/tyler-the-creator.jpg"
+    },
+    {
+      "name": "Luiz Bonfá",
+      "cover": "/img/albums/luiz-bonfa.jpg"
+    },
+    {
+      "name": "Antônio Carlos Jobim",
+      "cover": "/img/albums/antonio-carlos-jobim.jpg"
+    },
+    {
+      "name": "Naoki Sato",
+      "cover": "/img/albums/naoki-sato.jpg"
+    },
+    {
+      "name": "Procrastinación 1 Yo 0",
+      "cover": "/img/albums/procrastinacion-1-yo-0.jpg"
+    }
+  ]
+}

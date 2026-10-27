@@ -1,0 +1,131 @@
+---
+// Resumen de los ADR de docs/diseno/adr/ del monorepo: qué se decidió y qué se pagó a cambio.
+const adrs = [
+  {
+    n: '001',
+    title: 'Aislamiento multi-tenant',
+    decision: 'Cada tabla de una organización lleva su propio organizationId, y una extensión de Prisma lo filtra en toda consulta.',
+    tradeoff: 'Datos redundantes, a cambio de un aislamiento uniforme y difícil de olvidar en un endpoint nuevo.',
+  },
+  {
+    n: '002',
+    title: 'Autorización en vivo',
+    decision: 'El rol del JWT es solo informativo: cada petición resuelve el permiso contra la base.',
+    tradeoff: 'Una consulta por petición, a cambio de que un cambio de rol se aplique al instante y sin cerrar sesión.',
+  },
+  {
+    n: '003',
+    title: 'Acceso remoto a la base de test',
+    decision: 'Túnel SSH con un usuario sin shell que solo puede reenviar a 127.0.0.1:5432, con una clave por persona.',
+    tradeoff: 'Un paso más para conectarse, a cambio de que Postgres nunca quede expuesto a internet.',
+  },
+  {
+    n: '004',
+    title: 'Cloudflare Tunnel',
+    decision: 'Conexión saliente al borde de Cloudflare, con Access por email delante de cada hostname.',
+    tradeoff: 'Dependencia de un servicio gratuito de terceros, a cambio de cero puertos abiertos en el router y adiós al DDNS.',
+  },
+  {
+    n: '005',
+    title: 'Login con selección de organización',
+    decision: 'Un token de selección de 5 minutos, separado del de acceso, que solo sirve para elegir organización.',
+    tradeoff: 'Dos tipos de token que hay que mantener separados, a cambio de no guardar la contraseña ni emitir sesiones a medias.',
+  },
+  {
+    n: '006',
+    title: 'Respaldo diario local',
+    decision: 'pg_dump y mc mirror cada noche en el mismo servidor, con 7 días de retención.',
+    tradeoff: 'Si el disco muere se pierde todo: riesgo aceptado por escrito mientras solo haya usuarios internos.',
+    provisional: true,
+  },
+  {
+    n: '007',
+    title: 'CI obligatorio por convención',
+    decision: 'Sin protección de ramas en GitHub Free, la regla "no se mergea en rojo" la aplica el equipo, y el acta la audita.',
+    tradeoff: 'Depende de la disciplina y no de la herramienta, a cambio de costo cero y de mantener el repo privado.',
+  },
+];
+---
+
+<ol class="adrs">
+  {
+    adrs.map((a) => (
+      <li class="card adr">
+        <div class="adr-head">
+          <span class="mono adr-n">ADR-{a.n}</span>
+          {a.provisional && <span class="mono provisional">provisional</span>}
+        </div>
+        <h3 class="adr-title">{a.title}</h3>
+        <p class="decision">{a.decision}</p>
+        <p class="tradeoff">
+          <span class="mono tradeoff-label">a cambio de</span>
+          {a.tradeoff}
+        </p>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .adrs {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+    gap: 14px;
+  }
+  /* Fichas de catálogo: línea roja arriba y renglones como en una tarjeta de biblioteca. */
+  .adr {
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-top: 3px solid var(--data);
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent 0 27px,
+      color-mix(in srgb, var(--line) 55%, transparent) 27px 28px
+    );
+    background-position: 0 52px;
+  }
+  .adr-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+  .adr-n {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--data);
+  }
+  .provisional {
+    font-size: 12px;
+    border: 1px dashed var(--dashed);
+    border-radius: 999px;
+    padding: 0 8px;
+    color: var(--muted);
+  }
+  .adr-title {
+    font-size: 17px;
+    line-height: 1.3;
+  }
+  .decision {
+    font-size: 15px;
+    color: var(--ink-2);
+  }
+  .tradeoff {
+    margin-top: auto;
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .tradeoff-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+</style>

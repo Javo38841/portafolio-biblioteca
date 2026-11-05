@@ -1,14 +1,30 @@
 ---
 // El homelab real es un notebook. En su pantalla, el flujo de lo que corre dentro.
-const rows = ['Docker · dev · prod · MinIO', 'PostgreSQL 16 · dev y prod', 'Runner de GitHub Actions'];
+import { getLang } from '../../i18n/ui';
+
+const copy = {
+  es: {
+    title: 'El notebook que hace de servidor',
+    desc: 'Un notebook abierto. En su pantalla, Cloudflare Tunnel conecta con Ubuntu Server, que corre Docker con los stacks de dev, prod y MinIO, PostgreSQL 16 y el runner de GitHub Actions.',
+    rows: ['Docker · dev · prod · MinIO', 'PostgreSQL 16 · dev y prod', 'Runner de GitHub Actions'],
+  },
+  en: {
+    title: 'The laptop that works as my server',
+    desc: 'An open laptop. On its screen, Cloudflare Tunnel connects to Ubuntu Server, which runs Docker with the dev, prod and MinIO stacks, PostgreSQL 16 and the GitHub Actions runner.',
+    rows: ['Docker · dev · prod · MinIO', 'PostgreSQL 16 · dev and prod', 'GitHub Actions runner'],
+  },
+  pt: {
+    title: 'O notebook que funciona como servidor',
+    desc: 'Um notebook aberto. Na tela, o Cloudflare Tunnel se conecta ao Ubuntu Server, que roda Docker com os stacks de dev, prod e MinIO, PostgreSQL 16 e o runner do GitHub Actions.',
+    rows: ['Docker · dev · prod · MinIO', 'PostgreSQL 16 · dev e prod', 'Runner do GitHub Actions'],
+  },
+}[getLang(Astro.currentLocale)];
+const rows = copy.rows;
 ---
 
 <svg viewBox="0 0 360 236" role="img" aria-labelledby="nb-title nb-desc" class="notebook">
-  <title id="nb-title">El notebook que hace de servidor</title>
-  <desc id="nb-desc">
-    Un notebook abierto. En su pantalla, Cloudflare Tunnel conecta con Ubuntu Server, que corre Docker con los stacks
-    de dev, prod y MinIO, PostgreSQL 16 y el runner de GitHub Actions.
-  </desc>
+  <title id="nb-title">{copy.title}</title>
+  <desc id="nb-desc">{copy.desc}</desc>
 
   <ellipse cx="180" cy="226" rx="168" ry="6" class="shadow"></ellipse>
 

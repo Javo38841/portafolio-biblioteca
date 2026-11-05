@@ -3,17 +3,24 @@ import Icon from '../Icon.astro';
 import CopyEmail from '../CopyEmail.astro';
 import ServerIllustration from './ServerIllustration.astro';
 import { site, withBase } from '../../data/site';
+import { getLang, useTranslations } from '../../i18n/ui';
+import { home } from '../../i18n/home';
+
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const h = home[lang].hero;
+const lb = h.books;
 
 // Cada libro del estante lleva a una sección. Alto/ancho en px, color de tela del lomo.
 const books = [
-  { label: 'Sobre mí', href: '#sobre-mi', color: '#7a2e2e', h: 206, w: 50 },
-  { label: 'Qué hago hoy', href: '#hoy', color: '#2f4f6b', h: 232, w: 58 },
-  { label: 'Proyectos', href: '#proyectos', color: '#3e5f3a', h: 198, w: 48 },
-  { label: 'Caso LMS', href: withBase('/proyectos/lms'), color: '#1f3b2a', h: 250, w: 80, featured: true },
-  { label: 'Enseño', href: '#enseno', color: '#7a5b14', h: 214, w: 50 },
-  { label: 'Libros', href: '#libros', color: '#8c2f2f', h: 220, w: 52 },
-  { label: 'Fuera del código', href: '#fuera', color: '#5a3a5e', h: 226, w: 56 },
-  { label: 'Contacto', href: '#contacto', color: '#6b3a1e', h: 196, w: 48, lean: true },
+  { label: lb.about, href: '#sobre-mi', color: '#7a2e2e', h: 206, w: 50 },
+  { label: lb.now, href: '#hoy', color: '#2f4f6b', h: 232, w: 58 },
+  { label: lb.projects, href: '#proyectos', color: '#3e5f3a', h: 198, w: 48 },
+  { label: lb.lms, href: withBase('/proyectos/lms'), color: '#1f3b2a', h: 250, w: 80, featured: true },
+  { label: lb.teach, href: '#enseno', color: '#7a5b14', h: 214, w: 50 },
+  { label: lb.books, href: '#libros', color: '#8c2f2f', h: 220, w: 52 },
+  { label: lb.outside, href: '#fuera', color: '#5a3a5e', h: 226, w: 56 },
+  { label: lb.contact, href: '#contacto', color: '#6b3a1e', h: 196, w: 48, lean: true },
 ];
 
 // Los talleres, apilados en horizontal.
@@ -27,22 +34,18 @@ const stack = [
 
 <section class="container hero">
   <div class="intro">
-    <div class="kicker">{site.role} · {site.location}</div>
-    <!-- TODO: revisar el texto final del hero -->
-    <h1>Hola, soy Javier.</h1>
-    <p class="tagline">Construyo software como en una empresa — y enseño a hacerlo.</p>
-    <p class="lead">
-      Analista de Soporte TI y Software en Intermex. Fuera del trabajo monto mi propia infraestructura: un homelab con
-      CI/CD y un LMS hecho desde cero con prácticas de equipo profesional. Saca un libro del estante.
-    </p>
+    <div class="kicker">{t('site.role')} · {site.location}</div>
+        <h1>{h.hello}</h1>
+    <p class="tagline">{h.tagline}</p>
+    <p class="lead">{h.lead}</p>
     <div class="actions">
       <a class="btn btn-primary" href={withBase('/proyectos/lms')}>
-        Abrir el caso LMS <Icon name="arrow" size={18} />
+        {h.openLms} <Icon name="arrow" size={18} />
       </a>
       {
         site.cvPdf && (
           <a class="btn" href={withBase(site.cvPdf)} download>
-            Descargar CV <Icon name="download" size={18} />
+            {h.downloadCv} <Icon name="download" size={18} />
           </a>
         )
       }
@@ -57,7 +60,7 @@ const stack = [
   <div class="bookcase wood">
     <div class="back">
       <!-- repisa 1: libros = secciones -->
-      <nav class="shelf books" aria-label="Secciones del sitio">
+      <nav class="shelf books" aria-label={h.shelfLabel}>
         {
           books.map((b) => (
             <a
@@ -76,7 +79,7 @@ const stack = [
       <div class="shelf objects">
         <figure class="laptop">
           <ServerIllustration />
-          <figcaption>Mi servidor: un notebook</figcaption>
+          <figcaption>{h.serverCaption}</figcaption>
         </figure>
         <figure class="frame">
           <div class="frame-wood wood">
@@ -89,9 +92,9 @@ const stack = [
               decoding="async"
             />
           </div>
-          {site.homelabPhoto.isReference && <figcaption class="brass-label">Imagen referencial</figcaption>}
+          {site.homelabPhoto.isReference && <figcaption class="brass-label">{h.photoNote}</figcaption>}
         </figure>
-        <a class="stack" href="#enseno" aria-label="Talleres que enseño: Git y GitFlow, Java, SQL Server, NestJS y Angular">
+        <a class="stack" href="#enseno" aria-label={h.workshopsLabel}>
           {
             stack.map((s) => (
               <span class="hbook" style={`--spine: ${s.color}; width: ${s.w}px;`}>

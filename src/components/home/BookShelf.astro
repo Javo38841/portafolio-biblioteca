@@ -5,12 +5,13 @@
 //            (y su portada en la repisa, si el libro tiene `cover`).
 //  - cover:  cada lomo es un botón que pone la portada del libro de pie en la misma repisa.
 import { withBase } from '../../data/site';
+import { getLang, useTranslations } from '../../i18n/ui';
 
 interface Book {
   title: string;
   author: string;
   color: string;
-  applied?: string;
+  applied?: string | Record<string, string>;
   cover?: string;
   dark?: boolean;
 }
@@ -25,10 +26,18 @@ const { books, label, mode = 'static' } = Astro.props;
 const interactive = mode !== 'static';
 const showStand = mode === 'cover' || (mode === 'card' && books.some((b) => b.cover));
 const heights = [282, 300, 268, 294, 276, 300, 286, 272];
-const data = books.map((b) => ({ ...b, cover: b.cover ? withBase(b.cover) : undefined }));
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const data = books.map((b) => ({
+  ...b,
+  applied: typeof b.applied === 'object' ? (b.applied[lang] ?? b.applied.es) : b.applied,
+  cover: b.cover ? withBase(b.cover) : undefined,
+}));
+// textos para el script del cliente
+const msgs = { coverOf: t('shelf.coverOf'), by: t('shelf.by') };
 ---
 
-<div class:list={['shelf-wrap', `mode-${mode}`]} data-shelf={interactive ? JSON.stringify(data) : undefined} data-mode={mode}>
+<div class:list={['shelf-wrap', `mode-${mode}`]} data-shelf={interactive ? JSON.stringify(data) : undefined} data-mode={mode} data-msgs={JSON.stringify(msgs)}>
   <div class="case wood">
     <div class="back">
       <div class="row" role={interactive ? 'group' : 'list'} aria-label={label}>
@@ -62,7 +71,7 @@ const data = books.map((b) => ({ ...b, cover: b.cover ? withBase(b.cover) : unde
             <div class="stand" aria-live="polite">
               <img data-cover alt="" hidden />
               <p class="stand-empty" data-empty>
-                Saca un libro para ver su portada
+                {t('shelf.pickCover')}
               </p>
             </div>
           )
@@ -75,16 +84,16 @@ const data = books.map((b) => ({ ...b, cover: b.cover ? withBase(b.cover) : unde
   {
     mode === 'card' && (
       <article class="ficha" aria-live="polite">
-        <header class="ficha-head">Ficha de lectura</header>
+        <header class="ficha-head">{t('shelf.card')}</header>
         <p class="empty" data-empty>
-          Saca un libro del estante para ver su ficha.
+          {t('shelf.pickCard')}
         </p>
         <dl data-fields hidden>
-          <dt>Título</dt>
+          <dt>{t('shelf.title')}</dt>
           <dd data-field="title" />
-          <dt>Autor</dt>
+          <dt>{t('shelf.author')}</dt>
           <dd data-field="author" />
-          <dt>Dónde lo aplico</dt>
+          <dt>{t('shelf.applied')}</dt>
           <dd data-field="applied" />
         </dl>
       </article>
@@ -98,6 +107,7 @@ const data = books.map((b) => ({ ...b, cover: b.cover ? withBase(b.cover) : unde
   document.querySelectorAll<HTMLElement>('[data-shelf]').forEach((root) => {
     const books: Book[] = JSON.parse(root.dataset.shelf ?? '[]');
     const mode = root.dataset.mode;
+    const msgs: { coverOf: string; by: string } = JSON.parse(root.dataset.msgs ?? '{}');
     const spines = [...root.querySelectorAll<HTMLButtonElement>('button.spine')];
     const empties = root.querySelectorAll<HTMLElement>('[data-empty]');
     const field = (name: string) => root.querySelector<HTMLElement>(`[data-field="${name}"]`)!;
@@ -121,7 +131,8 @@ const data = books.map((b) => ({ ...b, cover: b.cover ? withBase(b.cover) : unde
           cover.hidden = false;
           cover.classList.remove('show');
           cover.src = book.cover;
-          cover.alt = `Portada de ${book.title}${book.author ? `, de ${book.author}` : ''}`;
+          cover.alt =
+            msgs.coverOf.replace('{title}', book.title) + (book.author ? msgs.by.replace('{author}', book.author) : '');
           // reinicia la animación de "sacar el libro"
           void cover.offsetWidth;
           cover.classList.add('show');

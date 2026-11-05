@@ -2,6 +2,7 @@
 // Carrusel de vinilos: una funda por artista con su carátula; el disco asoma al pasar el mouse.
 import Icon from '../Icon.astro';
 import { withBase } from '../../data/site';
+import { getLang, useTranslations } from '../../i18n/ui';
 
 interface Artist {
   name: string;
@@ -14,17 +15,18 @@ interface Props {
 }
 
 const { artists, label } = Astro.props;
+const t = useTranslations(getLang(Astro.currentLocale));
 const spotify = (name: string) => `https://open.spotify.com/search/${encodeURIComponent(name)}/artists`;
 ---
 
 <div class="crate" data-carousel>
   <div class="head">
-    <span class="count">{artists.length} artistas</span>
+    <span class="count">{artists.length} {t('crate.artists')}</span>
     <div class="controls">
-      <button type="button" class="ctrl prev" data-prev aria-label="Ver artistas anteriores">
+      <button type="button" class="ctrl prev" data-prev aria-label={t('crate.prev')}>
         <Icon name="arrow" size={20} />
       </button>
-      <button type="button" class="ctrl" data-next aria-label="Ver más artistas">
+      <button type="button" class="ctrl" data-next aria-label={t('crate.next')}>
         <Icon name="arrow" size={20} />
       </button>
     </div>
@@ -38,7 +40,7 @@ const spotify = (name: string) => `https://open.spotify.com/search/${encodeURICo
             href={spotify(name)}
             target="_blank"
             rel="noopener"
-            aria-label={`${name} en Spotify (se abre en otra pestaña)`}
+            aria-label={t('crate.spotify', { name })}
           >
             <span class="record" aria-hidden="true" />
             <span class="sleeve" aria-hidden="true">
